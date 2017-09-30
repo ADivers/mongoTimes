@@ -1,17 +1,15 @@
-/* Showing Mongoose's "Populated" Method
- * =============================================== */
-
-// Dependencies
 var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+
 // Requiring our Note and Article models
 var Note = require("./models/Note.js");
 var Article = require("./models/Article.js");
-// Our scraping tools
+
 var request = require("request");
 var cheerio = require("cheerio");
+
 // Set mongoose to leverage built in JavaScript ES6 Promises
 mongoose.Promise = Promise;
 
@@ -150,7 +148,30 @@ app.post("/articles/:id", function(req, res) {
 });
 
 
+// This will get the articles we saved from the mongoDB
+app.get("/saved", function(req, res) {
+  // Grab every doc in the Articles array
+  Article.find({}, function(error, doc) {
+    // Log any errors
+    if (error) {
+      console.log(error);
+    }
+    // Or send the doc to the browser as a json object
+    else {
+      res.json(doc);
+    }
+  });
+});
+
+
+
+
+
 // Listen on port 3000
 app.listen(3000, function() {
   console.log("App running on port 3000!");
 });
+
+
+
+
